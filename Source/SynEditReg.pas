@@ -131,7 +131,8 @@ uses
   SynHighlighterIDL,
   SynHighlighterUnreal,
   SynHighlighterST,
-  SynHighlighterLDraw,   
+  SynHighlighterLDraw,
+  SynHighlighterST_CPD,
   SynURIOpener,
   Classes;
 
@@ -181,6 +182,7 @@ begin
     //classic
     TSynCppSyn, TSynEiffelSyn, TSynFortranSyn, TSynGeneralSyn, TSynJavaSyn,
     TSynM3Syn, TSynPasSyn, TSynVBSyn, TSynCobolSyn, TSynCSSyn, TSynGoSyn,
+    TSynSTCPDSyn,
     // internet
     TSynCssSyn, TSynHTMLSyn, TSynJScriptSyn, TSynPHPSyn, TSynVBScriptSyn,
     TSynXMLSyn, TSynJSONSyn, TSynVrml97Syn, TSynECMAScriptSyn,

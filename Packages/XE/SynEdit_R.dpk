@@ -24,6 +24,28 @@ package SynEdit_R;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
 {$DESCRIPTION 'SynEdit component suite runtime'}
 {$LIBSUFFIX 'XE'}
 {$RUNONLY}
@@ -128,6 +150,7 @@ contains
   SynHighlighterSml in '..\..\Source\SynHighlighterSml.pas',
   SynHighlighterSQL in '..\..\Source\SynHighlighterSQL.pas',
   SynHighlighterST in '..\..\Source\SynHighlighterST.pas',
+  SynHighlighterST_CPD in '..\..\Source\SynHighlighterST_CPD.pas',
   SynHighlighterTclTk in '..\..\Source\SynHighlighterTclTk.pas',
   SynHighlighterTeX in '..\..\Source\SynHighlighterTeX.pas',
   SynHighlighterUNIXShellScript in '..\..\Source\SynHighlighterUNIXShellScript.pas',

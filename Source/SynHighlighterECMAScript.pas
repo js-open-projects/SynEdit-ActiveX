@@ -692,55 +692,55 @@ begin
   case FRange of
     rsMultiLineComment: MultiLineCommentProc;
   else
-    case FLine[Run] of
-      #0:
+    case ord(FLine[Run]) of
+      0:
         NullProc;
-      #10:
+      10:
         LFProc;
-      #13:
+      13:
         CRProc;
-      #1..#9, #11, #12, #14..#32:
+      1..9, 11, 12, 14..32:
         SpaceProc;
-      '"', #39:
+      ord('"'), 39:
         StringProc;
-      '%':
+      ord('%'):
         ModSymbolProc;
-      '&':
+      ord('&'):
         AndSymbolProc;
-      '.':
+      ord('.'):
         DotProc;
-      '/':
+      ord('/'):
         SlashProc;
-      '-':
+      ord('-'):
         MinusProc;
-      '\':
+      ord('\'):
         BackslashProc;
-      '|':
+      ord('|'):
         OrSymbolProc;
-      '(', ')':
+      ord('('), ord(')'):
         SymbolProc;
-      '*':
+      ord('*'):
         StarProc;
-      '+':
+      ord('+'):
         PlusProc;
-      '=':
+      ord('='):
         EqualsProc;
-      '>':
+      ord('>'):
         GreaterProc;
-      '<':
+      ord('<'):
         LessProc;
-      '!':
+      ord('!'):
         NotProc;
-      '?':
+      ord('?'):
         CoalesceProc;
-      '^':
+      ord('^'):
         XorSymbolProc;
-      '~', ',', '[', ']', ':', ';', '{', '}':
+      ord('~'), ord(','), ord('['), ord(']'), ord(':'), ord(';'), ord('{'), ord('}'):
         SymbolProc;
-      '0'..'9':
+      ord('0')..ord('9'):
         NumberProc;
-      'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-      #$0F8..#$2C1:
+      ord('A')..ord('Z'), ord('a')..ord('z'), ord('_'), ord('$'), $AA, $B5, $BA, $C0..$D6, $D8..$F6,
+      $0F8..$2C1:
         IdentProc;
     else
       UnknownProc;
@@ -824,9 +824,9 @@ end;
 
 function TSynECMAScriptSyn.IsIdentChar(AChar: WideChar): Boolean;
 begin
-  case AChar of
-    'A'..'Z', 'a'..'z', '_', '$', #$AA, #$B5, #$BA, #$C0..#$D6, #$D8..#$F6,
-    #$0F8..#$2C1:
+  case ord(AChar) of
+    ord('A')..ord('Z'), ord('a')..ord('z'), ord('_'), ord('$'), $AA, $B5, $BA, $C0..$D6, $D8..$F6,
+    $0F8..$2C1:
       Result := True;
     else
       Result := False;

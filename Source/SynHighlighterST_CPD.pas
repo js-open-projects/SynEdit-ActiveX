@@ -1052,7 +1052,6 @@ end;
 procedure TSynSTCPDSyn.NullProc;
 begin
   FTokenId := tkNull;
-  //? inc(Run); //?
 end;
 
 {procedure TSynSTCPDSyn.CRProc;
@@ -1295,16 +1294,23 @@ end;
 
 procedure TSynSTCPDSyn.PointProc;
 begin
-  if (FLine[Run + 1] = '.') then
-    begin                              {ellipse}
-      inc(Run, 2);
-      fTokenID := tkOperator;
-    end
-  else                                 {point}
+if (FLine[Run + 1] = '.') then
+  begin
+    if (FLine[Run + 2] = '.') then
     begin
-      inc(Run);
+      inc(Run, 3);
+      fTokenID := tkInvalid;
+    end
+    else begin
+      inc(Run, 2);
       fTokenID := tkDelimiter;
-    end;
+    end
+  end
+else
+  begin
+    inc(Run);
+    fTokenID := tkOperator;
+  end;
 end;
 
 procedure TSynSTCPDSyn.RoundCloseProc;
@@ -1314,31 +1320,101 @@ begin
 end;
 
 procedure TSynSTCPDSyn.RoundOpenProc;
+ var closed_trans : boolean;
+     T : String;
 begin
-  if (FLine[Run + 1] = '*') then 
+  closed_trans := false;
+  if (FLine[Run + 1] = '*') then
    begin
+//    inc(fCommentDeep);
     if (FLine[Run + 2] = '$') then
       begin
        inc(Run, 3);
-       fTokenID := tkDirective;
+       T := '';
+       while CharInSet(WideChar(FLine[Run]), ['a'..'z', 'A'..'Z']) do
+       begin
+        T := T + UpCase(FLine[Run]);
+        Inc(Run);
+       end;
+       if T = 'VMASM'
+        then
+         fTokenID := tkVMAsm
+        else
+         fTokenID := tkDirective;
       end
+    else if (FLine[Run + 2] = '#') then
+       begin
+         if jtsAllowSpecialProc in fOptions then
+          fTokenID := tkSpecialProc
+         else
+          fTokenID := tkComment;
+       end
+    else if (FLine[Run + 2] = '@') then
+       begin
+         if jtsAllowVerifDirect in fOptions then
+          fTokenID := tkVerifDirect
+         else
+          fTokenID := tkComment;
+       end
     else
       begin
        inc(Run, 2);
        fTokenID := tkComment;
-      end; 
+      end;
     while fLine[Run] <> #0 do
           case fLine[Run] of
+{            '(':
+              begin
+                if fLine[Run + 1] = '*'
+                  then
+                    begin
+                      Inc(fCommentDeep);
+                      Inc(Run);
+                    end;
+                Inc(Run);
+              end;}
             '*':
               if fLine[Run + 1] = ')' then
               begin
                 inc(Run, 2);
-                break;
+{                Dec(fCommentDeep);
+                if fCommentDeep = 0 then
+                 begin
+                  closed_trans := true;
+                  break;
+                 end}
+                  closed_trans := true;
+                  break;
               end else inc(Run);
+{            #10, #13:
+              begin
+                if fTokenID = tkDirective then
+                   fRange := rsDirective
+                else if fTokenID = tkComment then
+                   fRange := rsComment
+                else
+                   fRange := rsUnknown;
+                break;
+              end;    }
           else inc(Run);
-          end;  
+          end;
+    if not closed_trans then
+    begin
+      if fTokenID = tkDirective then
+        fRange := rsDirective
+      else if fTokenID = tkComment then
+        fRange := rsComment
+      else if fTokenID = tkVMAsm then
+        fRange := rsVMAsm
+      else if fTokenID = tkSpecialProc then
+        fRange := rsSpecialProc
+      else if fTokenID = tkVerifDirect then
+        fRange := rsVerifDirect
+      else
+        fRange := rsUnknown;
+    end;
    end
- else 
+ else
    begin
     inc(Run);
     FTokenID := tkDelimiter;
@@ -1472,7 +1548,7 @@ end;
 
 function TSynSTCPDSyn.GetEol: Boolean;
 begin
-  Result := Run = FLineLen + 1;
+  Result := fTokenID = tkNull;
 end;
 
 function TSynSTCPDSyn.GetKeyWords(TokenKind: Integer): UnicodeString;

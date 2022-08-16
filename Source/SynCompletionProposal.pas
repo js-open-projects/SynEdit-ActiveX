@@ -179,6 +179,10 @@ type
     FOldShowCaret: Boolean;
     FHeightBuffer: Integer;
     FColumns: TProposalColumns;
+//JS 2008.04-22 12:12 added for ActiveX control
+{$IFDEF SJ_ACTIVEX}
+    FAppWinSend     : HWND;
+{$ENDIF}
     procedure SetCurrentString(const Value: UnicodeString);
     procedure MoveLine(cnt: Integer; const WrapAround: Boolean = False);
     procedure ScrollbarOnChange(Sender: TObject);
@@ -274,6 +278,9 @@ type
     property Columns: TProposalColumns read FColumns write SetColumns;
     property Resizeable: Boolean read FResizeable write SetResizeable default True;
     property Images: TImageList read FImages write SetImages;
+{$IFDEF SJ_ACTIVEX}
+    property AppWinSend : HWND read FAppWinSend write FAppWinSend;
+{$ENDIF}
   end;
 
   TSynBaseCompletionProposal = class(TComponent)
@@ -347,6 +354,10 @@ type
     procedure SetMargin(const Value: Integer);
     function GetImages: TImageList;
     function IsWordBreakChar(AChar: WideChar): Boolean;
+{$IFDEF SJ_ACTIVEX}
+    procedure SetAppWinSend(const Value : HWND);
+    function GetAppWinSend : HWND;
+{$ENDIF}
   protected
     procedure DefineProperties(Filer: TFiler); override;
     procedure SetOptions(const Value: TSynCompletionOptions); virtual;
@@ -378,6 +389,9 @@ type
     property Form: TSynBaseCompletionProposalForm read FForm;
     property PreviousToken: UnicodeString read FPreviousToken;
     property Position: Integer read GetPosition write SetPosition;
+{$IFDEF SJ_ACTIVEX}
+    property AppWinSend : HWND read GetAppWinSend write SetAppWinSend;
+{$ENDIF}
   published
     property DefaultType: SynCompletionType read GetDefaultKind write SetDefaultKind default ctCode;
     property Options: TSynCompletionOptions read GetOptions write SetOptions default DefaultProposalOptions;
@@ -461,6 +475,9 @@ type
     procedure DeactivateTimer;
     property Editors[i: Integer]: TCustomSynEdit read GetEditor;
     property CompletionStart: Integer read FCompletionStart write FCompletionStart;
+{$IFDEF SJ_ACTIVEX}
+    property AppWinSend;
+{$ENDIF}
   published
     property ShortCut: TShortCut read FShortCut write SetShortCut;
     property Editor: TCustomSynEdit read FEditor write SetEditor;
@@ -1317,7 +1334,8 @@ end;
 procedure TSynBaseCompletionProposalForm.Activate;
 begin
   Visible := True;
-  if DisplayType = ctCode then
+
+   if DisplayType = ctCode then
     (CurrentEditor as TCustomSynEdit).AddFocusControl(Self);
 end;
 
@@ -1344,6 +1362,12 @@ end;
 procedure TSynBaseCompletionProposalForm.KeyDown(var Key: Word; Shift: TShiftState);
 var
   C: WideChar;
+{$IFDEF SJ_ACTIVEX}
+  J_Kbd : TKeyboardState;
+  outValue : Integer;
+  CC : array [0..2] of WideChar;
+{$ENDIF}
+
 begin          
   if DisplayType = ctCode then
   begin
@@ -1439,6 +1463,20 @@ begin
         end;
       SYNEDIT_DELETE: if Assigned(CurrentEditor) then
                       (CurrentEditor as TCustomSynEdit).CommandProcessor(ecDeleteChar, #0, nil);
+
+{$IFDEF SJ_ACTIVEX}
+      else
+       begin
+        GetKeyboardState(J_Kbd);
+        outValue := ToUnicode(Key, MapVirtualKey(Key, 0), J_Kbd, @CC, 2, 0);
+       if ((outValue >= 1) and ( Assigned(CurrentEditor))) then
+         begin
+          (CurrentEditor as TCustomSynEdit).CommandProcessor(ecChar, CC[0], nil);
+          CurrentString := CurrentString + CC[0];
+//          KeyPress(C);
+         end
+       end;
+{$ENDIF}
     end;
   end;
   Invalidate;
@@ -1524,7 +1562,11 @@ begin
 
       FLinesInWindow := NewLinesInWindow;
 
-      NewHeight := FEffectiveItemHeight * FLinesInWindow + FHeightBuffer + BorderWidth;
+      NewHeight := FEffectiveItemHeight * FLinesInWindow + FHeightBuffer + BorderWidth
+{$IFDEF SJ_ACTIVEX}
+       + (FEffectiveItemHeight div 2)
+{$ENDIF}
+      ;
 
       if (NewWidth-BorderWidth) < FScrollbar.Width then
         NewWidth := FScrollbar.Width + BorderWidth;
@@ -2010,10 +2052,11 @@ function GetMDIParent (const Form: TSynForm): TSynForm;
 var
   I, J: Integer;
 begin
+{ W activeX tu nie ma formularza }
   Result := Form;
   if Form = nil then
     Exit;
-  if (Form is TSynForm) and
+  if (Form is TSynForm) and (Form is TForm) and
      ((Form as TForm).FormStyle = fsMDIChild) then
     for I := 0 to Screen.FormCount-1 do
       with Screen.Forms[I] do
@@ -2029,14 +2072,20 @@ begin
 end;
 
 procedure TSynBaseCompletionProposalForm.WMActivate(var Message: TWMActivate);
+{$IFDEF SJ_ACTIVEX}
+{$ELSE}
 var
   ParentForm: TSynForm;
+{$ENDIF}
 begin
   if csDesigning in ComponentState then begin
     inherited;
     Exit;
   end;
      {Owner of the component that created me}
+  {$IFDEF SJ_ACTIVEX}
+  SendMessage(AppWinSend, WM_NCACTIVATE, Ord(Message.Active <> WA_INACTIVE), 0);
+  {$ELSE}
   if Owner.Owner is TSynForm then
     ParentForm := GetMDIParent(Owner.Owner as TSynForm)
   else
@@ -2044,6 +2093,7 @@ begin
 
   if Assigned(ParentForm) and ParentForm.HandleAllocated then
     SendMessage(ParentForm.Handle, WM_NCACTIVATE, Ord(Message.Active <> WA_INACTIVE), 0);
+  {$ENDIF}
 end;
 
 procedure TSynBaseCompletionProposalForm.WMChar(var Msg: TWMChar);
@@ -2094,7 +2144,11 @@ end;
 procedure TSynBaseCompletionProposalForm.WMGetDlgCode(var Message: TWMGetDlgCode);
 begin
   inherited;
+  {$IFDEF SJ_ACTIVEX}
+    Message.Result := Message.Result or DLGC_WANTTAB or DLGC_WANTALLKEYS;
+  {$ELSE}
   Message.Result := Message.Result or DLGC_WANTTAB;
+  {$ENDIF}
 end;
 
 procedure TSynBaseCompletionProposalForm.AdjustMetrics;
@@ -2842,6 +2896,23 @@ begin
   Form.AssignedList.Assign(ItemList);
 end;
 
+{$IFDEF SJ_ACTIVEX}
+function TSynBaseCompletionProposal.GetAppWinSend : HWND;
+begin
+ if Assigned(FForm)
+  then
+    Result := FForm.FAppWinSend
+  else
+    Result := 0;
+end;
+
+procedure TSynBaseCompletionProposal.SetAppWinSend(const Value : HWND);
+begin
+if Assigned(FForm)
+ then
+   FForm.FAppWinSend := Value;
+end;
+{$ENDIF}
 { ----------------  TSynCompletionProposal -------------- }
 
 procedure TSynCompletionProposal.HandleOnCancel(Sender: TObject);

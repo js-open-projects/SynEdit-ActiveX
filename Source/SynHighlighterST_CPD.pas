@@ -74,7 +74,7 @@ type
 
   PIdentFuncTableFunc = ^TIdentFuncTableFunc;
   TIdentFuncTableFunc = function (Index: Integer): TtkTokenKind of object;
-  JTSynSTCPDSynOption = (jtsAllowCppComment, jtsAllowNestedComments, jtsAllowSpecialProc, jtsAllowVerifDirect, jtsUseFINTAsType);
+  JTSynSTCPDSynOption = (jtsAllowCppComment, jtsAllowNestedComments, jtsAllowSpecialProc, jtsAllowVerifDirect, jtsUseFINTAsType, jtsUseClassesSyntax, jtsUseTryCatchSyntax);
   JTSynSTCPDSynOptions = set of JTSynSTCPDSynOption;
 
 type
@@ -1429,8 +1429,17 @@ end;
 
 procedure TSynSTCPDSyn.SlashProc;
 begin
-  fTokenID := tkOperator;
-  inc(Run);
+if ((jtsAllowCppComment in fOptions) and (FLine[Run + 1] = '/' )) then
+   begin {c++ style comments}
+     fTokenID := tkComment;
+     inc(Run, 2);
+     while not (SysUtils.CharInSet( fLine[Run], [#0, #10, #13])) do Inc(Run);
+   end
+else
+  begin
+    fTokenID := tkOperator;
+    inc(Run);
+  end;
 end;
 
 procedure TSynSTCPDSyn.SpaceProc;

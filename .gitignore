@@ -9,6 +9,7 @@
 *.rsm
 *.stat
 *.map
+*.lib
 
 # Generated source #
 ###################
@@ -17,6 +18,12 @@
 # Backup files    #
 ###################
 *.~*
+*.bak
+*.#00
+*.pch
+*.Patch
+__history/
+__recovery/
 
 # IDE Files	  #
 ###################
@@ -36,4 +43,10 @@
 /Win32
 /Win64
 /OSX32
-/__history
+
+#    C++ Files    #
+###################
+*.prjmgc
+
+Packages/Sydney/CBuilder/Win64/
+Packages/Sydney/cpp/

@@ -1,4 +1,4 @@
-object FormFoldingDemo: TFormFoldingDemo
+object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Folding Demo'
@@ -10,21 +10,19 @@ object FormFoldingDemo: TFormFoldingDemo
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
-  object ActionMainMenuBar: TActionMainMenuBar
+  object ActionMainMenuBar1: TActionMainMenuBar
     Left = 0
     Top = 0
     Width = 635
     Height = 25
     UseSystemFont = False
-    ActionManager = ActionManager
-    Caption = 'ActionMainMenuBar'
+    ActionManager = ActionManager1
+    Caption = 'ActionMainMenuBar1'
     Color = clMenuBar
-    ColorMap.DisabledFontColor = 7171437
+    ColorMap.DisabledFontColor = 10461087
     ColorMap.HighlightColor = clWhite
     ColorMap.BtnSelectedFont = clBlack
     ColorMap.UnusedColor = clWhite
@@ -35,7 +33,7 @@ object FormFoldingDemo: TFormFoldingDemo
     Font.Style = []
     Spacing = 0
   end
-  object SynEdit: TSynEdit
+  object SynEdit1: TSynEdit
     Left = 0
     Top = 25
     Width = 635
@@ -47,24 +45,34 @@ object FormFoldingDemo: TFormFoldingDemo
     Font.Name = 'Consolas'
     Font.Pitch = fpFixed
     Font.Style = []
-    PopupMenu = PopupActionBar
+    Font.Quality = fqClearTypeNatural
+    PopupMenu = PopupActionBar1
     TabOrder = 1
-    CodeFolding.GutterShapeSize = 11
-    CodeFolding.CollapsedLineColor = clGrayText
-    CodeFolding.FolderBarLinesColor = clGrayText
-    CodeFolding.IndentGuidesColor = clGray
-    CodeFolding.IndentGuides = True
-    CodeFolding.ShowCollapsedLine = False
-    CodeFolding.ShowHintMark = True
     UseCodeFolding = False
-    Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
-    Gutter.Font.Color = clGrayText
-    Gutter.Font.Height = -12
+    Gutter.Font.Color = clWindowText
+    Gutter.Font.Height = -13
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
-    Gutter.GradientStartColor = clWindowText
-    Gutter.GradientEndColor = clWindow
+    Gutter.Font.Quality = fqClearTypeNatural
+    Gutter.Bands = <
+      item
+        Kind = gbkMarks
+        Width = 13
+      end
+      item
+        Kind = gbkLineNumbers
+      end
+      item
+        Kind = gbkFold
+      end
+      item
+        Kind = gbkTrackChanges
+      end
+      item
+        Kind = gbkMargin
+        Width = 3
+      end>
     Lines.Strings = (
       
         'This project demonstrates the code folding capabilities of Syned' +
@@ -99,8 +107,8 @@ object FormFoldingDemo: TFormFoldingDemo
         '[ssCtrl, ssShift]);'
       ''
       
-        'Note: The JavaScript, DWS and Python highlighters are Code Foldi' +
-        'ng enabled, but'
+        'Note: The JavaScript, and Python highlighters are Code Folding e' +
+        'nabled, but'
       
         'the C++ highlighter is not.  Code folding for C++ is provided by' +
         ' a Synedit '
@@ -111,42 +119,42 @@ object FormFoldingDemo: TFormFoldingDemo
         'ode folding'
       'in the unit SynEditCodeFolding.pas.')
     Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceEndKey, eoGroupUndo, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
+    ScrollbarAnnotations = <>
+    SelectedColor.Alpha = 0.400000005960464500
     TabWidth = 4
-    OnGutterGetText = SynEditGutterGetText
-    OnStatusChange = SynEditStatusChange
-    FontSmoothing = fsmNone
+    VisibleSpecialChars = []
   end
-  object ActionManager: TActionManager
+  object ActionManager1: TActionManager
     ActionBars = <
       item
         Items = <
           item
             Items = <
               item
-                Action = ActionFileOpen
+                Action = FileOpen1
                 ImageIndex = 7
                 ShortCut = 16463
               end
               item
-                Action = ActionSave
+                Action = ActSave
                 Caption = '&Save'
               end
               item
-                Action = ActionFileSaveAs
+                Action = FileSaveAs1
                 ImageIndex = 30
               end
               item
                 Caption = '-'
               end
               item
-                Action = ActionFilePrintSetup
+                Action = FilePrintSetup1
               end
               item
-                Action = ActionFilePageSetup
+                Action = FilePageSetup1
                 Caption = 'Pa&ge Setup...'
               end
               item
-                Action = ActionDialogPrintDlg
+                Action = DialogPrintDlg1
                 Caption = 'P&rint...'
                 ImageIndex = 14
                 ShortCut = 16464
@@ -155,7 +163,7 @@ object FormFoldingDemo: TFormFoldingDemo
                 Caption = '-'
               end
               item
-                Action = ActionFileExit
+                Action = FileExit1
                 ImageIndex = 43
               end>
             Caption = '&File'
@@ -163,31 +171,31 @@ object FormFoldingDemo: TFormFoldingDemo
           item
             Items = <
               item
-                Action = ActionEditCut
+                Action = EditCut1
                 ImageIndex = 0
                 ShortCut = 16472
               end
               item
-                Action = ActionEditCopy
+                Action = EditCopy1
                 ImageIndex = 1
                 ShortCut = 16451
               end
               item
-                Action = ActionEditPaste
+                Action = EditPaste1
                 ImageIndex = 2
                 ShortCut = 16470
               end
               item
-                Action = ActionEditSelectAll
+                Action = EditSelectAll1
                 ShortCut = 16449
               end
               item
-                Action = ActionEditUndo
+                Action = EditUndo1
                 ImageIndex = 3
                 ShortCut = 16474
               end
               item
-                Action = ActionEditDelete
+                Action = EditDelete1
                 ImageIndex = 5
                 ShortCut = 46
               end>
@@ -196,10 +204,10 @@ object FormFoldingDemo: TFormFoldingDemo
           item
             Items = <
               item
-                Action = ActionDialogFontEdit
+                Action = DialogFontEdit1
               end
               item
-                Action = ActionGutterLines
+                Action = actGutterLines
                 Caption = '&Gutter Lines'
               end
               item
@@ -208,22 +216,16 @@ object FormFoldingDemo: TFormFoldingDemo
               item
                 Items = <
                   item
-                    Action = ActionCPP
+                    Action = actCPP
+                    Caption = '&C++'
                   end
                   item
-                    Action = ActionDWS
+                    Action = actJavaScript
+                    Caption = '&JavaScript'
                   end
                   item
-                    Action = ActionJavaScript
-                  end
-                  item
-                    Action = ActionPython
-                  end
-                  item
-                    Action = ActionPascal
-                  end
-                  item
-                    Action = ActionXML
+                    Action = actPython
+                    Caption = '&Python'
                   end>
                 Caption = '&Highlighter'
                 UsageCount = 1
@@ -232,24 +234,24 @@ object FormFoldingDemo: TFormFoldingDemo
                 Caption = '-'
               end
               item
-                Action = ActionCodeFolding
+                Action = actCodeFolding
                 Caption = '&Code Folding'
               end
               item
                 Items = <
                   item
-                    Action = ActionShowCollapsedLines
+                    Action = actShowCollapsedLines
                     Caption = '&Collapsed Lines'
                   end
                   item
-                    Action = ActionShowCollapsedMarks
+                    Action = actShowCollapsedMarks
                     Caption = 'C&ollapsed Marks'
                   end
                   item
                     Caption = '-'
                   end
                   item
-                    Action = ActionFoldShapeSize
+                    Action = actFoldShapeSize
                     Caption = '&Gutter Square Size..'
                   end>
                 Caption = 'Fo&lding Options'
@@ -261,27 +263,27 @@ object FormFoldingDemo: TFormFoldingDemo
               item
                 Items = <
                   item
-                    Action = ActionFoldAll
+                    Action = actFoldAll
                     Caption = '&All'
                   end
                   item
-                    Action = ActionFoldNearest
+                    Action = actFoldNearest
                     Caption = '&Nearest'
                   end
                   item
-                    Action = ActionFoldRegions
+                    Action = actFoldRegions
                     Caption = '&Regions'
                   end
                   item
-                    Action = ActionFoldLevel1
+                    Action = actFoldLevel1
                     Caption = '&Level 1'
                   end
                   item
-                    Action = ActionFoldLevel2
+                    Action = actFoldLevel2
                     Caption = 'L&evel 2'
                   end
                   item
-                    Action = ActionFoldLevel3
+                    Action = actFoldLevel3
                     Caption = 'Le&vel 3'
                   end>
                 Caption = 'F&old'
@@ -290,27 +292,27 @@ object FormFoldingDemo: TFormFoldingDemo
               item
                 Items = <
                   item
-                    Action = ActionUnFoldAll
+                    Action = actUnFoldAll
                     Caption = '&All'
                   end
                   item
-                    Action = ActionUnfoldNearest
+                    Action = actUnfoldNearest
                     Caption = '&Nearest'
                   end
                   item
-                    Action = ActionUnfoldRegions
+                    Action = actUnfoldRegions
                     Caption = '&Regions'
                   end
                   item
-                    Action = ActionUnfoldLevel1
+                    Action = actUnfoldLevel1
                     Caption = '&Level 1'
                   end
                   item
-                    Action = ActionUnfoldLevel2
+                    Action = actUnfoldLevel2
                     Caption = 'L&evel 2'
                   end
                   item
-                    Action = ActionUnfoldLevel3
+                    Action = actUnfoldLevel3
                     Caption = 'Le&vel 3'
                   end>
                 Caption = '&Unfold'
@@ -318,45 +320,45 @@ object FormFoldingDemo: TFormFoldingDemo
               end>
             Caption = '&View'
           end>
-        ActionBar = ActionMainMenuBar
+        ActionBar = ActionMainMenuBar1
       end>
-    OnUpdate = ActionManagerUpdate
-    Left = 440
+    OnUpdate = ActionManager1Update
+    Left = 464
     Top = 32
     StyleName = 'Platform Default'
-    object ActionShowCollapsedLines: TAction
+    object actShowCollapsedLines: TAction
       Category = 'Folding Options'
       AutoCheck = True
       Caption = 'Collapsed Lines'
-      OnExecute = ActionShowCollapsedLinesExecute
+      OnExecute = actShowCollapsedLinesExecute
     end
-    object ActionFileOpen: TFileOpen
+    object FileOpen1: TFileOpen
       Category = 'File'
       Caption = '&Open...'
       Hint = 'Open|Opens an existing file'
       ImageIndex = 7
       ShortCut = 16463
-      OnAccept = ActionFileOpenAccept
+      OnAccept = FileOpen1Accept
     end
-    object ActionSave: TAction
+    object ActSave: TAction
       Category = 'File'
       Caption = 'Save'
-      OnExecute = ActionSaveExecute
+      OnExecute = ActSaveExecute
     end
-    object ActionFileSaveAs: TFileSaveAs
+    object FileSaveAs1: TFileSaveAs
       Category = 'File'
       Caption = 'Save &As...'
       Dialog.Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
       Hint = 'Save As|Saves the active file with a new name'
       ImageIndex = 30
-      OnAccept = ActionFileSaveAsAccept
+      OnAccept = FileSaveAs1Accept
     end
-    object ActionFilePrintSetup: TFilePrintSetup
+    object FilePrintSetup1: TFilePrintSetup
       Category = 'File'
       Caption = 'Print Set&up...'
       Hint = 'Print Setup'
     end
-    object ActionFilePageSetup: TFilePageSetup
+    object FilePageSetup1: TFilePageSetup
       Category = 'File'
       Caption = 'Page Set&up...'
       Dialog.MinMarginLeft = 0
@@ -370,61 +372,61 @@ object FormFoldingDemo: TFormFoldingDemo
       Dialog.PageWidth = 21590
       Dialog.PageHeight = 27940
     end
-    object ActionDialogPrintDlg: TPrintDlg
+    object DialogPrintDlg1: TPrintDlg
       Category = 'File'
       Caption = '&Print...'
       ImageIndex = 14
       ShortCut = 16464
-      OnAccept = ActionDialogPrintDlgAccept
+      OnAccept = DialogPrintDlg1Accept
     end
-    object ActionFileExit: TFileExit
+    object FileExit1: TFileExit
       Category = 'File'
       Caption = 'E&xit'
       Hint = 'Exit|Quits the application'
       ImageIndex = 43
     end
-    object ActionEditCut: TEditCut
+    object EditCut1: TEditCut
       Category = 'Edit'
       Caption = 'Cu&t'
       Hint = 'Cut|Cuts the selection and puts it on the Clipboard'
       ImageIndex = 0
       ShortCut = 16472
     end
-    object ActionEditCopy: TEditCopy
+    object EditCopy1: TEditCopy
       Category = 'Edit'
       Caption = '&Copy'
       Hint = 'Copy|Copies the selection and puts it on the Clipboard'
       ImageIndex = 1
       ShortCut = 16451
     end
-    object ActionEditPaste: TEditPaste
+    object EditPaste1: TEditPaste
       Category = 'Edit'
       Caption = '&Paste'
       Hint = 'Paste|Inserts Clipboard contents'
       ImageIndex = 2
       ShortCut = 16470
     end
-    object ActionEditSelectAll: TEditSelectAll
+    object EditSelectAll1: TEditSelectAll
       Category = 'Edit'
       Caption = 'Select &All'
       Hint = 'Select All|Selects the entire document'
       ShortCut = 16449
     end
-    object ActionEditUndo: TEditUndo
+    object EditUndo1: TEditUndo
       Category = 'Edit'
       Caption = '&Undo'
       Hint = 'Undo|Reverts the last action'
       ImageIndex = 3
       ShortCut = 16474
     end
-    object ActionEditDelete: TEditDelete
+    object EditDelete1: TEditDelete
       Category = 'Edit'
       Caption = '&Delete'
       Hint = 'Delete|Erases the selection'
       ImageIndex = 5
       ShortCut = 46
     end
-    object ActionDialogFontEdit: TFontEdit
+    object DialogFontEdit1: TFontEdit
       Category = 'View'
       Caption = 'Select &Font...'
       Dialog.Font.Charset = DEFAULT_CHARSET
@@ -433,204 +435,190 @@ object FormFoldingDemo: TFormFoldingDemo
       Dialog.Font.Name = 'Tahoma'
       Dialog.Font.Style = []
       Dialog.Options = [fdEffects, fdFixedPitchOnly]
+      Dialog.OnApply = DialogFontEdit1FontDialogApply
       Hint = 'Font Select'
-      BeforeExecute = ActionDialogFontEditBeforeExecute
+      BeforeExecute = DialogFontEdit1BeforeExecute
     end
-    object ActionGutterLines: TAction
+    object actGutterLines: TAction
       Category = 'View'
       AutoCheck = True
       Caption = 'Gutter Lines'
-      OnExecute = ActionGutterLinesExecute
+      OnExecute = actGutterLinesExecute
     end
-    object ActionCPP: TAction
+    object actCPP: TAction
       Category = 'Highlighter'
-      Caption = '&C++'
-      OnExecute = ActionCPPExecute
+      Caption = 'C++'
+      OnExecute = actCPPExecute
     end
-    object ActionJavaScript: TAction
+    object actJavaScript: TAction
       Category = 'Highlighter'
-      Caption = '&JavaScript'
-      OnExecute = ActionJavaScriptExecute
+      Caption = 'JavaScript'
+      OnExecute = actJavaScriptExecute
     end
-    object ActionPython: TAction
+    object actPython: TAction
       Category = 'Highlighter'
-      Caption = 'P&ython'
-      OnExecute = ActionPythonExecute
+      Caption = 'Python'
+      OnExecute = actPythonExecute
     end
-    object ActionCodeFolding: TAction
+    object actCodeFolding: TAction
       Category = 'View'
       AutoCheck = True
       Caption = 'Code Folding'
-      OnExecute = ActionCodeFoldingExecute
+      OnExecute = actCodeFoldingExecute
     end
-    object ActionFoldAll: TAction
+    object actFoldAll: TAction
       Category = 'Fold'
       Caption = 'All'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnFoldAll: TAction
+    object actUnFoldAll: TAction
       Category = 'Unfold'
       Caption = 'All'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionFoldNearest: TAction
+    object actFoldNearest: TAction
       Category = 'Fold'
       Caption = 'Nearest'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionFoldRegions: TAction
+    object actFoldRegions: TAction
       Category = 'Fold'
       Caption = 'Regions'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionFoldLevel1: TAction
+    object actFoldLevel1: TAction
       Category = 'Fold'
       Caption = 'Level 1'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionFoldLevel2: TAction
+    object actFoldLevel2: TAction
       Category = 'Fold'
       Caption = 'Level 2'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionFoldLevel3: TAction
+    object actFoldLevel3: TAction
       Category = 'Fold'
       Caption = 'Level 3'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnfoldNearest: TAction
+    object actUnfoldNearest: TAction
       Category = 'Unfold'
       Caption = 'Nearest'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnfoldRegions: TAction
+    object actUnfoldRegions: TAction
       Category = 'Unfold'
       Caption = 'Regions'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnfoldLevel1: TAction
+    object actUnfoldLevel1: TAction
       Category = 'Unfold'
       Caption = 'Level 1'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnfoldLevel2: TAction
+    object actUnfoldLevel2: TAction
       Category = 'Unfold'
       Caption = 'Level 2'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionUnfoldLevel3: TAction
+    object actUnfoldLevel3: TAction
       Category = 'Unfold'
       Caption = 'Level 3'
-      OnExecute = ActionFoldExecute
-      OnUpdate = ActionFoldUpdate
+      OnExecute = actFoldExecute
+      OnUpdate = actFoldUpdate
     end
-    object ActionDWS: TAction
-      Category = 'Highlighter'
-      Caption = '&DelphiWebScript'
-      OnExecute = ActionDWSExecute
-    end
-    object ActionShowCollapsedMarks: TAction
+    object actShowCollapsedMarks: TAction
       Category = 'Folding Options'
       AutoCheck = True
       Caption = 'Collapsed Marks'
       Checked = True
-      OnExecute = ActionShowCollapsedMarksExecute
+      OnExecute = actShowCollapsedMarksExecute
     end
-    object ActionFoldShapeSize: TAction
+    object actFoldShapeSize: TAction
       Category = 'Folding Options'
       Caption = 'Gutter Square Size..'
-      OnExecute = ActionFoldShapeSizeExecute
-    end
-    object ActionPascal: TAction
-      Category = 'Highlighter'
-      Caption = '&Pascal'
-      OnExecute = ActionPascalExecute
-    end
-    object ActionXML: TAction
-      Category = 'Highlighter'
-      Caption = '&XML'
-      OnExecute = ActionXMLExecute
+      OnExecute = actFoldShapeSizeExecute
     end
   end
-  object PopupActionBar: TPopupActionBar
-    Left = 532
+  object PopupActionBar1: TPopupActionBar
+    Left = 528
     Top = 32
     object N1: TMenuItem
       Caption = '-'
     end
-    object MenuItemCut: TMenuItem
-      Action = ActionEditCut
+    object Cut1: TMenuItem
+      Action = EditCut1
     end
-    object MenuItemCopy: TMenuItem
-      Action = ActionEditCopy
+    object Copy1: TMenuItem
+      Action = EditCopy1
     end
-    object MenuItemPaste: TMenuItem
-      Action = ActionEditPaste
+    object Paste1: TMenuItem
+      Action = EditPaste1
     end
     object N2: TMenuItem
       Caption = '-'
     end
-    object MenuItemFold: TMenuItem
+    object Fold1: TMenuItem
       Caption = 'Fold'
-      object MenuItemFoldAll: TMenuItem
-        Action = ActionFoldAll
+      object All1: TMenuItem
+        Action = actFoldAll
       end
-      object MenuItemFoldNearest: TMenuItem
-        Action = ActionFoldNearest
+      object Nearest1: TMenuItem
+        Action = actFoldNearest
       end
-      object MenuItemFoldRanges: TMenuItem
-        Action = ActionFoldRegions
+      object Ranges1: TMenuItem
+        Action = actFoldRegions
       end
       object N3: TMenuItem
         Caption = '-'
       end
-      object MenuItemFoldLevel1: TMenuItem
-        Action = ActionFoldLevel1
+      object Level11: TMenuItem
+        Action = actFoldLevel1
       end
-      object MenuItemFoldLevel2: TMenuItem
-        Action = ActionFoldLevel2
+      object Level21: TMenuItem
+        Action = actFoldLevel2
       end
-      object MenuItemFoldLevel3: TMenuItem
-        Action = ActionFoldLevel3
+      object Level31: TMenuItem
+        Action = actFoldLevel3
       end
     end
-    object MenuItemUnfold: TMenuItem
+    object Unfold1: TMenuItem
       Caption = 'Unfold'
-      object MenuItemUnfoldAll: TMenuItem
-        Action = ActionUnFoldAll
+      object All2: TMenuItem
+        Action = actUnFoldAll
       end
-      object MenuItemUnfoldNearest: TMenuItem
-        Action = ActionUnfoldNearest
+      object Nearest2: TMenuItem
+        Action = actUnfoldNearest
       end
-      object MenuItemUnfoldRanges: TMenuItem
-        Action = ActionUnfoldRegions
+      object Ranges2: TMenuItem
+        Action = actUnfoldRegions
       end
       object N4: TMenuItem
         Caption = '-'
       end
-      object MenuItemUnfoldLevel1: TMenuItem
-        Action = ActionUnfoldLevel1
+      object Level12: TMenuItem
+        Action = actUnfoldLevel1
       end
-      object MenuItemUnfoldLevel2: TMenuItem
-        Action = ActionUnfoldLevel2
+      object Level22: TMenuItem
+        Action = actUnfoldLevel2
       end
-      object MenuItemUnfoldLevel3: TMenuItem
-        Action = ActionUnfoldLevel3
+      object Level32: TMenuItem
+        Action = actUnfoldLevel3
       end
     end
   end
-  object SynEditPrint: TSynEditPrint
+  object SynEditPrint1: TSynEditPrint
     Copies = 1
     Header.DefaultFont.Charset = DEFAULT_CHARSET
     Header.DefaultFont.Color = clBlack
@@ -659,56 +647,24 @@ object FormFoldingDemo: TFormFoldingDemo
     Font.Style = []
     TabWidth = 8
     Color = clWhite
-    Left = 440
+    Left = 472
     Top = 176
   end
-  object SynCppSyn: TSynCppSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    Left = 532
+  object SynCppSyn1: TSynCppSyn
+    Left = 524
     Top = 80
   end
-  object SynJScriptSyn: TSynJScriptSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    Left = 440
+  object SynJScriptSyn1: TSynJScriptSyn
+    Left = 472
     Top = 80
   end
-  object SynPythonSyn: TSynPythonSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    Left = 440
+  object SynPythonSyn1: TSynPythonSyn
+    Left = 480
     Top = 128
   end
-  object PythonBehaviour: TSynEditPythonBehaviour
-    Editor = SynEdit
-    Left = 532
+  object SynEditPythonBehaviour1: TSynEditPythonBehaviour
+    Editor = SynEdit1
+    Left = 536
     Top = 128
-  end
-  object SynDWSSyn: TSynDWSSyn
-    DefaultFilter = 'DWScript Files (*.dws;*.pas;*.inc)|*.dws;*.pas;*.inc'
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    Left = 532
-    Top = 176
-  end
-  object SynPasSyn: TSynPasSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    Left = 440
-    Top = 232
-  end
-  object SynXMLSyn: TSynXMLSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
-    WantBracesParsed = False
-    Left = 532
-    Top = 232
   end
 end

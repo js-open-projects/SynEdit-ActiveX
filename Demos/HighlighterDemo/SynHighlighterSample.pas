@@ -9,10 +9,10 @@ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
 the specific language governing rights and limitations under the License.
 
 Code template generated with SynGen.
-The original code is: D:\Quellen\Komponenten\SynEdit\Demos\HighlighterDemo\SynHighlighterSample.pas, released 2008-10-25.
-Description: 
-The initial author of this file is Maël Hörz.
-Copyright (c) 2008, all rights reserved.
+The original code is: C:\Delphi\Components\SynEdit\Demos\HighlighterDemo\SynHighlighterSample.pas, released 2024-06-08.
+Description: Syntax Parser/Highlighter
+The initial author of this file is kiria.
+Copyright (c) 2024, all rights reserved.
 
 Contributors to the SynEdit and mwEdit projects are listed in the
 Contributors.txt file.
@@ -26,34 +26,17 @@ under the MPL, indicate your decision by deleting the provisions above and
 replace them with the notice and other provisions required by the GPL.
 If you do not delete the provisions above, a recipient may use your version
 of this file under either the MPL or the GPL.
-
-$Id: SynHighlighterSample.pas,v 1.6.2.13 2008/10/25 23:30:31 maelh Exp $
-
-You may retrieve the latest version of this file at the SynEdit home page,
-located at http://SynEdit.SourceForge.net
-
 -------------------------------------------------------------------------------}
 
-{$IFNDEF QSYNHIGHLIGHTERSAMPLE}
 unit SynHighlighterSample;
-{$ENDIF}
-
-{$I SynEdit.inc}
 
 interface
 
 uses
-{$IFDEF SYN_CLX}
-  QGraphics,
-  QSynEditTypes,
-  QSynEditHighlighter,
-  QSynUnicode,
-{$ELSE}
   Graphics,
   SynEditTypes,
   SynEditHighlighter,
   SynUnicode,
-{$ENDIF}
   SysUtils,
   Classes;
 
@@ -107,18 +90,18 @@ type
     procedure StringOpenProc;
     procedure StringProc;
   protected
-    function GetSampleSource: UnicodeString; override;
+    function GetSampleSource: string; override;
     function IsFilterStored: Boolean; override;
   public
     constructor Create(AOwner: TComponent); override;
-    class function GetFriendlyLanguageName: UnicodeString; override;
+    class function GetFriendlyLanguageName: string; override;
     class function GetLanguageName: string; override;
     function GetRange: Pointer; override;
     procedure ResetRange; override;
     procedure SetRange(Value: Pointer); override;
     function GetDefaultAttribute(Index: Integer): TSynHighlighterAttributes; override;
     function GetEol: Boolean; override;
-    function GetKeyWords(TokenKind: Integer): UnicodeString; override;
+    function GetKeyWords(TokenKind: Integer): string; override;
     function GetTokenID: TtkTokenKind;
     function GetTokenAttribute: TSynHighlighterAttributes; override;
     function GetTokenKind: Integer; override;
@@ -136,11 +119,7 @@ type
 implementation
 
 uses
-{$IFDEF SYN_CLX}
-  QSynEditStrConst;
-{$ELSE}
   SynEditStrConst;
-{$ENDIF}
 
 resourcestring
   SYNS_FilterTest = 'All files (*.*)|*.*';
@@ -151,7 +130,7 @@ resourcestring
 
 const
   // as this language is case-insensitive keywords *must* be in lowercase
-  KeyWords: array[0..2] of UnicodeString = (
+  KeyWords: array[0..2] of string = (
     'hello', 'synedit', 'world' 
   );
 
@@ -179,7 +158,7 @@ begin
   while IsIdentChar(Str^) do
   begin
     Result := Result * 3 + Ord(Str^);
-    inc(Str);
+    Inc(Str);
   end;
   Result := Result mod 3;
   fStringLen := Str - fToIdent;
@@ -229,29 +208,29 @@ end;
 
 procedure TSynSampleSyn.SpaceProc;
 begin
-  inc(Run);
+  Inc(Run);
   fTokenID := tkSpace;
-  while (FLine[Run] <= #32) and not IsLineEnd(Run) do inc(Run);
+  while (FLine[Run] <= #32) and not IsLineEnd(Run) do Inc(Run);
 end;
 
 procedure TSynSampleSyn.NullProc;
 begin
   fTokenID := tkNull;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynSampleSyn.CRProc;
 begin
   fTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
   if fLine[Run] = #10 then
-    inc(Run);
+    Inc(Run);
 end;
 
 procedure TSynSampleSyn.LFProc;
 begin
   fTokenID := tkSpace;
-  inc(Run);
+  Inc(Run);
 end;
 
 procedure TSynSampleSyn.BraceCommentOpenProc;
@@ -383,14 +362,14 @@ end;
 procedure TSynSampleSyn.IdentProc;
 begin
   fTokenID := IdentKind(fLine + Run);
-  inc(Run, fStringLen);
+  Inc(Run, fStringLen);
   while IsIdentChar(fLine[Run]) do
     Inc(Run);
 end;
 
 procedure TSynSampleSyn.UnknownProc;
 begin
-  inc(Run);
+  Inc(Run);
   fTokenID := tkUnknown;
 end;
 
@@ -435,7 +414,7 @@ begin
   Result := Run = fLineLen + 1;
 end;
 
-function TSynSampleSyn.GetKeyWords(TokenKind: Integer): UnicodeString;
+function TSynSampleSyn.GetKeyWords(TokenKind: Integer): string;
 begin
   Result := 
     'Hello,SynEdit,World';
@@ -476,7 +455,7 @@ begin
   end;
 end;
 
-function TSynSampleSyn.GetSampleSource: UnicodeString;
+function TSynSampleSyn.GetSampleSource: string;
 begin
   Result := 
     '{ Sample source for the demo highlighter }'#13#10 +
@@ -493,7 +472,7 @@ begin
   Result := fDefaultFilter <> SYNS_FilterTest;
 end;
 
-class function TSynSampleSyn.GetFriendlyLanguageName: UnicodeString;
+class function TSynSampleSyn.GetFriendlyLanguageName: string;
 begin
   Result := SYNS_FriendlyLangTest;
 end;

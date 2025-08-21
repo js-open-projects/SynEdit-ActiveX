@@ -29,7 +29,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FKeyList: TList;
-    FCaseSensitive: Boolean;
   public
     procedure AssignKeyWords(KeyList: TList; CaseSensitive: Boolean);
     function GetHashKeyFunctionSource(ClassName: string): string;
@@ -58,23 +57,21 @@ implementation
 {$R *.dfm}
 
 uses
-{$IFDEF SYN_COMPILER_6_UP}
   StrUtils,
-{$ENDIF}
   SynGenUnit,
   SynUnicode;
 
 {$I primenumbers.inc}
 
 var
-  c, d, m: Cardinal;
+  m: Cardinal;
   FinalC, FinalD, FinalM: Cardinal;
   searching: Boolean;
-  KeyWords: array of UnicodeString;
+  KeyWords: array of string;
   HashKeyList: THashKeyList;
 
 {$Q-}
-function HashKey(const S: UnicodeString): Cardinal;
+function HashKey(const S: string; c, d: Cardinal): Cardinal;
 var
   i: Integer;
 begin
@@ -86,7 +83,7 @@ end;
 {$Q+}
 
 {$Q-}
-function FinalHashKey(const S: UnicodeString): Cardinal;
+function FinalHashKey(const S: string): Cardinal;
 var
   i: Integer;
 begin
@@ -113,7 +110,7 @@ begin
       while (i < Words.Count) and (Length(Line) + Length(Words[i]) <= 80) do
       begin
         Line := Line + Words[i] + ' ';
-        inc(i);
+        Inc(i);
       end;
       WrappedLines.Add(Line);
     end;
@@ -143,7 +140,6 @@ var
   KeyWordsList: TStringList;
 begin
   FKeyList := nil;
-  FCaseSensitive := CaseSensitive;
   SetLength(KeyWords, 0);
   HashKeyList.Clear;
 
@@ -160,7 +156,7 @@ begin
        KeyWords[i] := KeyWordsList[i]
     else
       for i := 0 to KeyWordsList.Count - 1 do
-        KeyWords[i] := SynWideLowerCase(KeyWordsList[i]);
+        KeyWords[i] := SysUtils.AnsiLowerCase(KeyWordsList[i]);
 
     FKeyList := KeyList;
   finally
@@ -170,8 +166,6 @@ end;
 
 procedure TFrmHashTableGen.FormShow(Sender: TObject);
 begin
-  c := 0;
-  d := 0;
   m := 0;
   FinalC := 0;
   FinalD := 0;
@@ -195,17 +189,14 @@ begin
     for i := 0 to FKeyList.Count - 1 do
       with TLexKeys(FKeyList[i]) do
       begin
-        if FCaseSensitive then 
-          key := FinalHashKey(KeyName)
-        else 
-          Key := FinalHashKey(SynWideLowerCase(KeyName));
+        Key := FinalHashKey(SysUtils.AnsiLowerCase(KeyName));
       end;
   end;
 end;
 
 procedure TFrmHashTableGen.ButtonFindHashClick(Sender: TObject);
 var
-  i, j: Integer;
+  i, j, c, d: Integer;
   collided: Boolean;
   Key, smallestM: Cardinal;
 
@@ -232,7 +223,7 @@ begin
     LabelPercentage.Caption := '0%';
     Application.ProcessMessages;
 
-    if Length(KeyWords) = 0 then exit;
+    if Length(KeyWords) = 0 then Exit;
 
     searching := True;
     ButtonFindHash.Caption := 'Stop Search';
@@ -253,12 +244,12 @@ begin
         end;
         for i := Low(KeyWords) to High(KeyWords) do
         begin
-          Key := HashKey(KeyWords[i]);
+          Key := HashKey(KeyWords[i], c, d);
           collided := HashKeyList.Add(Key);
           if collided then
           begin
             HashKeyList.Clear;
-            break;
+            Break;
           end;
         end;
         if not collided then
@@ -277,7 +268,7 @@ begin
             SearchStop;
             Exit;
           end;
-        break; // all the following solutions will only have a bigger array
+        Break; // all the following solutions will only have a bigger array
         end;
         Application.ProcessMessages;
         if not searching then
@@ -310,32 +301,13 @@ begin
     Result := Result + Format('    Result := Result * %d + Ord(Str^);', [FinalC]) + #13#10
   else
     Result := Result + Format('    Result := Result * %d + Ord(Str^) * %d;', [FinalC, FinalD]) + #13#10;
-  Result := Result + '    inc(Str);'#13#10;
+  Result := Result + '    Inc(Str);'#13#10;
   Result := Result + '  end;'#13#10;
   Result := Result + '  Result := Result mod ' + IntToStr(FinalM) + ';'#13#10;
   Result := Result + '  fStringLen := Str - fToIdent;'#13#10;
   Result := Result + 'end;'#13#10;
   Result := Result + '{$Q+}'#13#10;
 end;
-
-{$IFNDEF SYN_COMPILER_6_UP}
-function DupeString(const AText: string; ACount: Integer): string;
-var
-  P: PChar;
-  C: Integer;
-begin
-  C := Length(AText);
-  SetLength(Result, C * ACount);
-  P := Pointer(Result);
-  if P = nil then Exit;
-  while ACount > 0 do
-  begin
-    Move(Pointer(AText)^, P^, C);
-    Inc(P, C);
-    Dec(ACount);
-  end;
-end;
-{$ENDIF}
 
 function TFrmHashTableGen.GetKeyWordConstantsSource(CaseSensitive: Boolean): string;
 var
@@ -346,7 +318,7 @@ begin
   // write KeyWords
   if not CaseSensitive then
     Result := Result + '  // as this language is case-insensitive keywords *must* be in lowercase'#13#10;
-  Result := Result + Format('  KeyWords: array[0..%d] of UnicodeString = (', [High(KeyWords)]) + #13#10;
+  Result := Result + Format('  KeyWords: array[0..%d] of string = (', [High(KeyWords)]) + #13#10;
   sl := TStringList.Create;
   try
     for i := Low(KeyWords) to High(KeyWords) do

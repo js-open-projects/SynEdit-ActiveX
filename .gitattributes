@@ -5,6 +5,13 @@
 # to native line endings on checkout.
 *.pas text
 *.dfm text
+*.md text
+*.txt text
+*.java text
+*.cs text
+*.dpk -text
+*.dproj -text
+*.groupproj -text
 
 # Declare files that will always have CRLF line endings on checkout.
 

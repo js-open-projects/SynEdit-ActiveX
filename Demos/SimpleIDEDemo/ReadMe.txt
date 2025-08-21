@@ -1,8 +1,8 @@
 SimpleIDEDemo.dpr
 -----------------
 
-- Needs Delphi 4 or higher.
 - Demonstrates how to highlight breakpoint or current lines in different colors
-  (as seen in the Delphi IDE).  Shows how to draw into the gutter without using
-  marker objects, using a SynEdit plugin.
+  (as seen in the Delphi IDE).  
 
+- Showcases the new Gutter.  A new custom gutter band that displays debugger information is 
+  created and uses the OnPaintLines, OnClick and OnMouseCursor events.

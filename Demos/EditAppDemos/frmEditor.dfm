@@ -1,54 +1,70 @@
 object EditorForm: TEditorForm
   Left = 338
   Top = 199
-  Width = 470
-  Height = 326
   ActiveControl = SynEditor
   Caption = 'Editor'
+  ClientHeight = 287
+  ClientWidth = 448
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = False
   OnActivate = FormActivate
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnDestroy = FormDestroy
   OnDeactivate = FormDeactivate
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 13
   object SynEditor: TSynEdit
     Left = 0
     Top = 0
-    Width = 462
-    Height = 292
+    Width = 448
+    Height = 287
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Style = []
+    Font.Quality = fqClearTypeNatural
     PopupMenu = pmnuEditor
     TabOrder = 0
     OnEnter = SynEditorEnter
     OnExit = SynEditorExit
+    UseCodeFolding = False
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
+    Gutter.Font.Quality = fqClearTypeNatural
+    Gutter.Bands = <
+      item
+        Kind = gbkMarks
+        Width = 15
+      end
+      item
+        Kind = gbkLineNumbers
+      end
+      item
+        Kind = gbkFold
+      end
+      item
+        Kind = gbkMargin
+        Width = 2
+      end>
+    Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceEndKey, eoGroupUndo, eoHideShowScrollbars, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoShowLigatures]
+    ScrollbarAnnotations = <>
     SearchEngine = SynEditSearch1
+    SelectedColor.Alpha = 0.400000005960464500
+    VisibleSpecialChars = []
     OnChange = SynEditorChange
     OnReplaceText = SynEditorReplaceText
     OnStatusChange = SynEditorStatusChange
     RemovedKeystrokes = <
-      item
-        Command = ecDeleteLastChar
-        ShortCut = 8200
-      end
       item
         Command = ecLineBreak
         ShortCut = 8205

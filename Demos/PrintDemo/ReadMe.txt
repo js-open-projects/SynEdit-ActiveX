@@ -1,9 +1,6 @@
-PrintDemo1.dpr
---------------
+PrintDemo
+---------
 
-- Needs Delphi 2 or higher.
-- Demonstrates printing with the TSynPrintout component from the
-  SynEditPrint_Old.pas unit.  This is not registered on the component palette,
-  it is created at runtime.
-
+- Needs Delphi Rio or higher (uses TImageCollection and TVirtualImageList).
+- Demonstrates components for printing and print preview.
 

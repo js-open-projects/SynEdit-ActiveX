@@ -28,20 +28,13 @@ under the MPL, indicate your decision by deleting the provisions above and
 replace them with the notice and other provisions required by the GPL.
 If you do not delete the provisions above, a recipient may use your version
 of this file under either the MPL or the GPL.
-
-$Id: SynGen.dpr,v 1.1.1.1.2.2 2004/12/19 19:03:41 maelh Exp $
-
-You may retrieve the latest version of this file at the SynEdit home page,
-located at http://SynEdit.SourceForge.net
-
-Known Issues:
 -------------------------------------------------------------------------------}
 
 program SynGen;
 
 uses
   Forms,
-  SynGenUnit in 'SynGenUnit.pas' {FormMain},
+  SynGenUnit in 'SynGenUnit.pas' {FrmMain},
   GenLex in 'GenLex.pas',
   HashTableGen in 'HashTableGen.pas' {FrmHashTableGen};
 
@@ -50,7 +43,7 @@ uses
 begin
   Application.Initialize;
   Application.Title := 'SynGen';
-  Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TFrmMain, FrmMain);
   Application.CreateForm(TFrmHashTableGen, FrmHashTableGen);
   Application.Run;
 end.

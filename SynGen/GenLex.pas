@@ -28,13 +28,6 @@ under the MPL, indicate your decision by deleting the provisions above and
 replace them with the notice and other provisions required by the GPL.
 If you do not delete the provisions above, a recipient may use your version
 of this file under either the MPL or the GPL.
-
-$Id: GenLex.pas,v 1.4.2.4 2008/10/25 23:30:31 maelh Exp $
-
-You may retrieve the latest version of this file at the SynEdit home page,
-located at http://SynEdit.SourceForge.net
-
-Known Issues:
 -------------------------------------------------------------------------------}
 
 unit GenLex;
@@ -42,7 +35,13 @@ unit GenLex;
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Controls, LongIntList, SynUnicode;
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Classes,
+  System.Generics.Collections,
+  Vcl.Controls,
+  SynUnicode;
 
 var
   Identifiers: array[#0..#255] of ByteBool;
@@ -84,11 +83,11 @@ type
     fStringLen: Integer;
     fToIdent: PWideChar;
     fTokenizing: Boolean;
-    FLinePosList: TLongIntList;
-    FTokenPositionsList: TLongIntList;
+    FLinePosList: TList<Integer>;
+    FTokenPositionsList: TList<Integer>;
     fIdentFuncTable: array[0..150] of function: TIdTokenKind of object;
     function KeyHash(ToHash: PWideChar): Integer;
-    function KeyComp(aKey: UnicodeString): Boolean;
+    function KeyComp(aKey: string): Boolean;
     function Func49: TIdTokenKind;
     function Func60: TIdTokenKind;
     function Func67: TIdTokenKind;
@@ -123,7 +122,7 @@ type
     procedure SetRunPos(Value: Integer);
     procedure MakeMethodTables;
     function GetRunId: TIdTokenKind;
-    function GetRunToken: UnicodeString;
+    function GetRunToken: string;
   protected
   public
     constructor Create;
@@ -133,11 +132,10 @@ type
     property IgnoreComments: Boolean read fIgnoreComments write fIgnoreComments;
     property Origin: PWideChar read fOrigin write SetOrigin;
     property RunPos: Integer read Run write SetRunPos;
-    function NextToken: UnicodeString;
+    function NextToken: string;
     function EOF: Boolean;
     property RunId: TIdTokenKind read GetRunId;
-    property RunToken: UnicodeString read GetRunToken;
-  published
+    property RunToken: string read GetRunToken;
   end;
 
 implementation
@@ -195,7 +193,7 @@ begin
   fStringLen := ToHash - fToIdent;
 end; { KeyHash }
 
-function TGenLex.KeyComp(aKey: UnicodeString): Boolean;
+function TGenLex.KeyComp(aKey: string): Boolean;
 var
   I: Integer;
   Temp: PWideChar;
@@ -209,9 +207,9 @@ begin
       if mHashTable[Char(Temp^)] <> mHashTable[Char(aKey[i])] then
       begin
         Result := False;
-        break;
+        Break;
       end;
-      inc(Temp);
+      Inc(Temp);
     end;
   end
   else
@@ -378,8 +376,8 @@ begin
   InitIdent;
   MakeMethodTables;
   fIgnoreComments := False;
-  FTokenPositionsList := TLongIntList.Create;
-  FLinePosList := TLongIntList.Create;
+  FTokenPositionsList := TList<Integer>.Create;
+  FLinePosList := TList<Integer>.Create;
 end; { Create }
 
 destructor TGenLex.Destroy;
@@ -449,12 +447,12 @@ end;
 procedure TGenLex.CRLFProc;
 begin
   case FOrigin[Walker] of
-    #10: inc(Walker);
+    #10: Inc(Walker);
     #13:
       case FOrigin[Walker + 1] of
-        #10: inc(Walker, 2);
+        #10: Inc(Walker, 2);
       else
-        inc(Walker);
+        Inc(Walker);
       end;
   end;
   if fTokenizing then
@@ -471,13 +469,13 @@ begin
   while FOrigin[Walker] <> #0 do
   begin
     case FOrigin[Walker] of
-      #10, #13: break;
+      #10, #13: Break;
       ':': if FOrigin[Walker + 1] = ':' then
-          break
+          Break
         else
-          inc(Walker);
+          Inc(Walker);
     else
-      inc(Walker);
+      Inc(Walker);
     end;
   end;
 end;
@@ -489,9 +487,9 @@ end;
 
 procedure TGenLex.IdentProc;
 begin
-  inc(Walker);
+  Inc(Walker);
   while Identifiers[Char(fOrigin[Walker])] do
-    inc(Walker);
+    Inc(Walker);
 end;
 
 function TGenLex.IdentFunc: TIdTokenKind;
@@ -514,7 +512,7 @@ end;
 procedure TGenLex.SpaceProc;
 begin
   while CharInSet(fOrigin[Walker], [#1..#9, #11, #12, #14..#32]) do
-    inc(Walker);
+    Inc(Walker);
 end;
 
 function TGenLex.SpaceFunc: TIdTokenKind;
@@ -524,16 +522,16 @@ end;
 
 procedure TGenLex.StopProc;
 begin
-  inc(Walker);
+  Inc(Walker);
   while FOrigin[Walker] <> #0 do
   begin
     case FOrigin[Walker] of
-      #10: break;
-      #13: break;
+      #10: Break;
+      #13: Break;
       '|':
         begin
           Inc(Walker);
-          break;
+          Break;
         end;
     else
       Inc(Walker);
@@ -552,7 +550,7 @@ end;
 
 procedure TGenLex.UnknownProc;
 begin
-  inc(Walker);
+  Inc(Walker);
 end;
 
 function TGenLex.UnknownFunc: TIdTokenKind;
@@ -571,7 +569,7 @@ begin
   Result := fFuncTable[Char(fOrigin[Running])];
 end;
 
-function TGenLex.GetRunToken: UnicodeString;
+function TGenLex.GetRunToken: string;
 var
   StartPos, EndPos, StringLen: Integer;
 begin
@@ -596,7 +594,7 @@ begin
   Inc(Run);
 end;
 
-function TGenLex.NextToken: UnicodeString;
+function TGenLex.NextToken: string;
 var
   StartPos, EndPos, Len: LongInt;
 begin
@@ -604,7 +602,7 @@ begin
   EndPos := FTokenPositionsList[Run + 1];
   Len := EndPos - StartPos;
   SetString(Result, (FOrigin + StartPos), Len);
-  inc(Run);
+  Inc(Run);
 end;
 
 initialization
